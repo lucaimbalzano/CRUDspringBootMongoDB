@@ -1,6 +1,7 @@
 package com.imbalzano.luca.service.model;
 
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @ToString
+@Data
 @Document(collection = "user")
 public class User {
         @Id
@@ -24,6 +26,7 @@ public class User {
 
 }
 
+//Example JSON user
 //{
 //        "_id" : ObjectId("614b12979b5224f41bf7d4f6"),
 //        "first_name" : "Doll",
