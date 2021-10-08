@@ -1,0 +1,20 @@
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            repository:
+              query: DEBUG
+spring:
+  data:
+    mongodb:
+      uri: 'mongodb://localhost:8080/getAllUsers'
+
+### Swagger Config
+    swagger:
+      enabled: true
+      tile: Swagger CRUD mongoDb
+      description: SpringBoot CRUD MongoDb
+      version: 1.0
