@@ -10,4 +10,9 @@ import java.util.List;
 @Repository
 public interface IUserRepository extends MongoRepository<User, Integer> {
 
+    @Query("{'age': ?0}")
+    List<User> findByAge(Integer age);
+
+    @Query("{'age': ?0, 'gender': ?1 }")
+    List<User> findByAgeAndGender(Integer age, String gender);
 }

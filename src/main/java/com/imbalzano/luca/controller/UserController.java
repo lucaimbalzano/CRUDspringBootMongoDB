@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Path;
 import java.util.*;
 
 
@@ -53,10 +54,30 @@ public class UserController {
     @GetMapping("/getAllUsers")
     public Map<Object,Object> getAllUsers(){
         Map<Object,Object> listUser = new HashMap<>();
-       listUser.put("message", "Request load with success!");
-       listUser.put("status", 200);
-       listUser.put("body", repository.findAll());
-       return listUser;
+        Map<Object,Object> response = new HashMap<>();
+        List<User> users = repository.findAll();
+        Map<Object, Object> objectObjectMap = users.isEmpty() ? getStatusAndMessageResponseGeneral(response, "[❌]  Error occurred: users not found",404):getStatusAndMessageResponseGeneral(response, "[✅] Users found with success!", 200) ;
+        response.put("body", users);
+        return response;
+    }
+
+    @GetMapping("getUserByAge/{age}")
+    public Map<Object,Object>  getUserByAge(@PathVariable(value="age") Integer age){
+        Map<Object,Object> response = new HashMap<>();
+        List<User> users = repository.findByAge(age);
+        Map<Object, Object> objectObjectMap = users.isEmpty() ? getStatusAndMessageResponseGeneral(response, "[❌]  Error occurred: user with "+age+"yo not found",404):getStatusAndMessageResponseGeneral(response, "[✅] User found with success!", 200) ;
+        response.put("body", users);
+        return response;
+    }
+
+    @GetMapping("getUserByAgeAndGender/{age}/{gender}")
+    public Map<Object,Object>  getUserByAge(@PathVariable(value="age") Integer age,
+                                            @PathVariable(value="gender") String gender){
+        Map<Object,Object> response = new HashMap<>();
+        List<User> users = repository.findByAgeAndGender(age,gender);
+        Map<Object, Object> objectObjectMap = users.isEmpty() ? getStatusAndMessageResponseGeneral(response, "[❌]  Error occurred: user with properties "+gender+" and "+age+"yo not found",404):getStatusAndMessageResponseGeneral(response, "[✅] User found with success!", 200) ;
+        response.put("body", users);
+        return response;
     }
 
     @GetMapping("/getUserByEmail/{email}")
@@ -120,6 +141,14 @@ public class UserController {
         userResponseApi.setStatus(Status.NOT_FOUND);
         userResponseApi.setMessage("Error: User not found");
         return userResponseApi;
+    }
+
+
+
+    private  Map<Object,Object> getStatusAndMessageResponseGeneral(Map<Object,Object> response, String message, int status){
+        response.put("message", message);
+        response.put("status", status);
+        return response;
     }
 
 
